@@ -46,7 +46,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             return;
         }
 
-        const user: User | null = await UserModel.findOne({ username: req.body.email });
+        const user: User | null = await UserModel.findOne({ email: req.body.email });
         if (!user) {
             res.status(400).json({ message: "No such user",success:false });
             return;
@@ -55,7 +55,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         // Compare
         const passwordMatch = await bcrypt.compare(req.body.password, user.password);
         if (passwordMatch) {
-            const token = jwt.sign({ id: user._id, username: user.email }, process.env.JWT_SECRET as string);
+            const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET as string);
             res.status(200).json({ success: true, message: "Login successful", token: token,});
         } else {
             res.status(400).json({ message: "Wrong password" });
@@ -71,7 +71,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
       
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10; 
-        const users: User[] = await UserModel.find()
+        const users: User[] = await UserModel.find({},{ password: 0 })
             .skip((page - 1) * limit)
             .limit(limit);
 
