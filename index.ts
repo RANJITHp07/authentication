@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import { db } from './db';
+import userRoute from './routes/userRoute'
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ app.use(helmet());
 
 
 //routing middleware
-
+app.use(userRoute)
 
 
 

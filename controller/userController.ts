@@ -35,7 +35,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 
-const login = async (req: Request, res: Response, next: NextFunction) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const loginData = plainToClass(LoginDTO, req.body);
 
@@ -55,7 +55,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         // Compare
         const passwordMatch = await bcrypt.compare(req.body.password, user.password);
         if (passwordMatch) {
-            const token = jwt.sign({ id: user._id, username: user.email }, process.env.SECRET_KEY as string);
+            const token = jwt.sign({ id: user._id, username: user.email }, process.env.JWT_SECRET as string);
             res.status(200).json({ success: true, message: "Login successful", token: token,});
         } else {
             res.status(400).json({ message: "Wrong password" });
