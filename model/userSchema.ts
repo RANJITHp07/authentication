@@ -11,11 +11,10 @@ export interface User extends Document {
 const UserSchema: Schema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
     firstName: { type: String, required: true, minlength: 3 },
     lastName: { type: String }
 });
 
-const userModel= mongoose.model<User>('User', UserSchema);
+const UserModel= mongoose.model<User>('User', UserSchema);
 
-export default userModel;
+export default UserModel;
