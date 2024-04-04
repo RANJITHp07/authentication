@@ -64,3 +64,23 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
 };
+
+//  find all the users with pagination
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10; 
+        const users: User[] = await UserModel.find()
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        res.status(200).json({
+            success: true,
+            page,
+            users
+        });
+    } catch (err) {
+        next(err);
+    }
+};
